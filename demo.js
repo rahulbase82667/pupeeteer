@@ -98,23 +98,21 @@
 
 
 
-/* eslint-disable no-console */
-const puppeteer = require('puppeteer-extra');
-const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-const axios = require('axios');
-puppeteer.use(StealthPlugin());
- 
-/* ───────────────────────────────────────────────────────────
-   CONFIG
-   ─────────────────────────────────────────────────────────── */
-const PAGE_URL = 'https://imigresen-online.imi.gov.my/mdac/register?viewRegistration';
-const CAPTCHA_API_KEY = 'c0e6a672bc4d4a535a3dec1f0d5d07c3';   // 2Captcha API key
-const POLL_INTERVAL = 5000;                             // ms between polls
-const POLL_TIMEOUT  = 180000;                           // overall timeout (3 min)
+import dotenv from 'dotenv';
+dotenv.config();
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import axios from 'axios';
 
-/* ───────────────────────────────────────────────────────────
-   2CAPTCHA HELPERS
-   ─────────────────────────────────────────────────────────── */
+
+puppeteer.use(StealthPlugin());
+
+ 
+const PAGE_URL = 'https://imigresen-online.imi.gov.my/mdac/register?viewRegistration';
+const CAPTCHA_API_KEY = process.env.CAPTCHA_API_KEY;
+const POLL_INTERVAL = 5000;   
+const POLL_TIMEOUT  = 180000;
+
 async function request2CaptchaTask({ sitekey, url }) {
   const params = new URLSearchParams({
     key: CAPTCHA_API_KEY,
@@ -156,9 +154,6 @@ async function solveCaptcha({ sitekey, url }) {
   return token;
 }
 
-/* ───────────────────────────────────────────────────────────
-   MAIN
-   ─────────────────────────────────────────────────────────── */
 (async () => {
   const browser = await puppeteer.launch({ headless: false, defaultViewport: null });
   const page = await browser.newPage();

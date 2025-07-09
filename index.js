@@ -8,6 +8,8 @@ app.use(express.json());
 
 app.use('/api', router);
 
+app.get('/', (req, res) => { res.json("Backend index"); });
+
 app.listen(3000, () => {
   console.log('✅ Server running at http://localhost:3000');
 });
