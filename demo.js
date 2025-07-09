@@ -103,7 +103,7 @@ const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const axios = require('axios');
 puppeteer.use(StealthPlugin());
-
+ 
 /* ───────────────────────────────────────────────────────────
    CONFIG
    ─────────────────────────────────────────────────────────── */
