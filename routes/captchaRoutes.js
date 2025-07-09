@@ -1,12 +1,12 @@
-// routes/captchaRoute.mjs
-
 import express from 'express';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import axios from 'axios';
-import fs from 'fs/promises';
 
 const router = express.Router();
+
+const pluginStealth = StealthPlugin();
+pluginStealth.enabledEvasions.delete('chrome.app'); 
 
 puppeteer.use(StealthPlugin());
 
