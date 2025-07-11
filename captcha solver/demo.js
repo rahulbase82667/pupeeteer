@@ -49,9 +49,9 @@
 //     await page.goto(PAGE_URL, { waitUntil: 'networkidle2' });
 
 //     // Fill in the form
-//     await page.type('#passNo', 'YUJHY6869');
-//     await page.select('#nationality', 'AUT');
-//     await page.type('#pinKeyId', 'yhyTzU8F');
+//     await page.type('#passNo', 'A1234567');
+//     await page.select('#nationality', 'IND');
+//     await page.type('#pinKeyId', '123456');
 //     console.log('📝 Form fields filled.');
 
 //     // Get the reCAPTCHA site key
@@ -98,21 +98,23 @@
 
 
 
-import dotenv from 'dotenv';
-dotenv.config();
-import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import axios from 'axios';
-
-
+/* eslint-disable no-console */
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+const axios = require('axios');
 puppeteer.use(StealthPlugin());
 
- 
+/* ───────────────────────────────────────────────────────────
+   CONFIG
+   ─────────────────────────────────────────────────────────── */
 const PAGE_URL = 'https://imigresen-online.imi.gov.my/mdac/register?viewRegistration';
-const CAPTCHA_API_KEY = process.env.CAPTCHA_API_KEY;
-const POLL_INTERVAL = 5000;   
-const POLL_TIMEOUT  = 180000;
+const CAPTCHA_API_KEY = 'c0e6a672bc4d4a535a3dec1f0d5d07c3';   // 2Captcha API key
+const POLL_INTERVAL = 5000;                             // ms between polls
+const POLL_TIMEOUT  = 180000;                           // overall timeout (3 min)
 
+/* ───────────────────────────────────────────────────────────
+   2CAPTCHA HELPERS
+   ─────────────────────────────────────────────────────────── */
 async function request2CaptchaTask({ sitekey, url }) {
   const params = new URLSearchParams({
     key: CAPTCHA_API_KEY,
@@ -154,15 +156,18 @@ async function solveCaptcha({ sitekey, url }) {
   return token;
 }
 
+/* ───────────────────────────────────────────────────────────
+   MAIN
+   ─────────────────────────────────────────────────────────── */
 (async () => {
   const browser = await puppeteer.launch({ headless: false, defaultViewport: null });
   const page = await browser.newPage();
   await page.goto(PAGE_URL, { waitUntil: 'networkidle2' });
 
   // 1️⃣  Fill form (adjust selectors if the site changes)
-  await page.type('#passNo', 'YUJHY6869');
-  await page.select('#nationality', 'AUT');
-  await page.type('#pinKeyId', 'yhyTzU8F');
+  await page.type('#passNo', 'CTMK6996');
+  await page.select('#nationality', 'BGD');
+  await page.type('#pinKeyId', 'xUrBh9j9');
   console.log('📝 Form fields filled.');
 
   // 2️⃣  Grab reCAPTCHA site‑key from the page
